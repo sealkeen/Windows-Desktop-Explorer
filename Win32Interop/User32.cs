@@ -12,7 +12,7 @@ namespace Win32Interop
     public class User32
     {
         [DllImport("user32.dll")]
-        static extern bool SetWindowPos(
+        public static extern bool SetWindowPos(
             IntPtr hWnd,
             IntPtr hWndInsertAfter,
             int X,
@@ -20,6 +20,10 @@ namespace Win32Interop
             int cx,
             int cy,
             uint uFlags);
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        public static extern void SwitchToThisWindow(IntPtr hWnd, bool fUnknown);
 
         const UInt32 SWP_NOSIZE = 0x0001;
         const UInt32 SWP_NOMOVE = 0x0002;

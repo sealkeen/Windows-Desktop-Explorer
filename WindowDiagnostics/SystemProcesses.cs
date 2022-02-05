@@ -25,10 +25,15 @@ namespace WindowDiagnostics
             System.Threading.Thread.Sleep(2000);
             SendMessage(lHwnd, WM_COMMAND, (IntPtr)MIN_ALL_UNDO, IntPtr.Zero);
         }
+
+        public static Process[] GetPocesses()
+        {
+            return Process.GetProcesses();
+        }
+
         public static void listProcesses()
         {
-            Process[] processlist = Process.GetProcesses();
-            foreach (Process process in processlist)
+            foreach (Process process in GetPocesses())
             {
                 if (!String.IsNullOrEmpty(process.MainWindowTitle))
                 {
@@ -36,5 +41,7 @@ namespace WindowDiagnostics
                 }
             }
         }
+
+
     }
 }

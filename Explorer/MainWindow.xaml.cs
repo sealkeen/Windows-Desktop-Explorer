@@ -8,7 +8,10 @@ using System.Windows.Controls;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Win32Interop;
+using System.Linq;
 
 namespace Explorer
 {
@@ -17,12 +20,16 @@ namespace Explorer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string SettingsPath = Path.Combine(Environment.CurrentDirectory, "Settings");
+        private static string SettingsFolderPath = Path.Combine(Environment.CurrentDirectory, "Settings");
+        private static string SettingsFilePath = Path.Combine(SettingsFolderPath, "settings.xml");
+        public static WindowDiagnostics.Program DiagnosticsProgram = new WindowDiagnostics.Program();
 
         public MainWindow()
         {
             InitializeComponent();
             App.MainWindow = this;
+            this.lstProcesses.DataContext = DiagnosticsProgram;
+            DiagnosticsProgram.ListProcesses();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -50,13 +57,30 @@ namespace Explorer
         {
             try
             {
-                //Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "Settings"));
-                //StreamReader sR = new StreamReader(SettingsPath);
-                //sR.ReadLine();
+                if (File.Exists(Environment.CurrentDirectory + "/start.jpg"))
+                    btnStart.Background = new ImageBrush(new BitmapImage(new Uri(Environment.CurrentDirectory + "/start.jpg")));
 
-                explorerGrid.Background = new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Sealkeen\Pictures\Wallpapper\#Wallpapers #Shutdown.jpg")));
-                btnStart.Background = new ImageBrush(new BitmapImage(new Uri(Environment.CurrentDirectory+"/start.jpg")));
+                if (File.Exists(SettingsFilePath))
+                {
+                    //File.SetAttributes(SettingsFilePath, FileAttributes.Normal);
+                    FileStream sR = new FileStream(SettingsFilePath, FileMode.OpenOrCreate);
+                    string imageName = SettingsReader.ReadLastElement(sR);
+                    explorerGrid.Background = new ImageBrush(new BitmapImage(new Uri(imageName)));
+                    sR.Close();
+                }
             } catch (Exception ex) {
+                
+            }
+        }
+
+        private void WriteSettings()
+        {
+            try {
+                //StreamWriter sR = new StreamWriter(SettingsFolderPath);
+                //XElement backGroundImage = new XElement("image");
+                //backGroundImage.Value = new XText();
+            }
+            catch (Exception ex) { 
                 
             }
         }
@@ -64,12 +88,41 @@ namespace Explorer
         private void explorerGrid_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             User32.SendWpfWindowBack(App.MainWindow);
+            DiagnosticsProgram.ListProcesses();
+            lstProcesses.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
         private void btnChangeBackground_Click(object sender, RoutedEventArgs e)
         {
-            var fileData = Plugin.FilePicker.CrossFilePicker.Current.PickFile();
-            SetBackground(fileData.Result.FilePath);
+            try
+            {
+                var fileData = Plugin.FilePicker.CrossFilePicker.Current.PickFile();
+                SetBackground(fileData.Result.FilePath);
+                if (!Directory.Exists(SettingsFolderPath))
+                    Directory.CreateDirectory(SettingsFolderPath);
+                if(!File.Exists(SettingsFilePath))
+                    File.Create(SettingsFilePath);
+
+                XDocument xD; XElement root;
+                var elements = SettingsReader.GetElements(SettingsFilePath);
+                if (elements.Count() == 0)
+                {
+                    root = new XElement("BackgroundImages");
+                    xD = new XDocument();
+                    xD.Add(root);
+                } else {
+                    xD = XDocument.Load(SettingsFilePath);
+                    root = xD.Elements().First();
+                }
+                XElement backGroundImage = new XElement("image");
+                backGroundImage.Value = fileData.Result.FilePath;
+                root.Add(backGroundImage);
+                xD.Save(SettingsFilePath);
+                //sR.WriteLine(backGroundImage);
+                //sR.Close();
+            } catch (Exception ex) {
+                
+            }
         }
 
         private void btnCloseDesktop_Click(object sender, RoutedEventArgs e)
@@ -87,6 +140,26 @@ namespace Explorer
             } catch (Exception ex) { 
 
             }
+        }
+
+        private void btnOpenExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("cmd.exe");
+        }
+
+        private void btnMinimizeAll_Click(object sender, RoutedEventArgs e)
+        {
+            WindowDiagnostics.SystemProcesses.MinimizeAll();
+        }
+
+        private void lstProcesses_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                var proc = (lstProcesses.SelectedItem as System.Diagnostics.Process);
+                Win32Interop.User32.SwitchToThisWindow(proc.MainWindowHandle, true);
+            }
+            catch { }
         }
     }
 }

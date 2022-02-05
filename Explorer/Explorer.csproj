@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SettingsReader.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -108,6 +109,10 @@
     <ProjectReference Include="..\Win32Interop\Win32Interop.csproj">
       <Project>{CFC78B33-F276-4625-8631-62C0365EFFCF}</Project>
       <Name>Win32Interop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WindowDiagnostics\WindowDiagnostics.csproj">
+      <Project>{08CF6899-D6BA-44B9-967F-774699D917B2}</Project>
+      <Name>WindowDiagnostics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
