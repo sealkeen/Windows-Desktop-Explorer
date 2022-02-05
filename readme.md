@@ -1,1 +1,1 @@
-<img src="Images/DesktopExplorer_1.jpg" width="480"/>
+<img src="Images/DesktopExplorer_1.png" width="480"/>
