@@ -144,12 +144,22 @@ namespace Explorer
 
         private void btnOpenExplorer_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("cmd.exe");
+            System.Diagnostics.Process.Start(@"C:\Windows\SysWOW64\explorer.exe", Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
         }
 
         private void btnMinimizeAll_Click(object sender, RoutedEventArgs e)
         {
-            WindowDiagnostics.SystemProcesses.MinimizeAll();
+
+            Task.Factory.StartNew(() => 
+                User32.TileWindows()
+                //WindowDiagnostics.SystemProcesses.
+                //WindowDiagnostics.SystemProcesses.MinimizeAll()
+                );
+        }        
+        
+        private void btnOpenCMD_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("cmd.exe");
         }
 
         private void lstProcesses_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -160,6 +170,35 @@ namespace Explorer
                 Win32Interop.User32.SwitchToThisWindow(proc.MainWindowHandle, true);
             }
             catch { }
+        }
+
+        private void lstProcesses_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //User32.SendWpfWindowBack(App.MainWindow);
+            DiagnosticsProgram.ListProcesses();
+            lstProcesses.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+        }
+
+        private void btnOpenTaskManager_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("taskmgr");
+        }
+
+        private void btnShutdown_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("shutdown", "/s /f /t 0"); 
+            //Process.Start("shutdown", "/r /t 0");  // shutdown and restart
+            //Process.Start("shutdown", "/h /f");    // hibernate
+        }
+
+        private void btnFullScreen_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.Current.MainWindow.WindowState != WindowState.Maximized)
+                App.Current.MainWindow.WindowState = WindowState.Maximized;
+            else
+                App.Current.MainWindow.WindowState = WindowState.Normal;
+            //Process.Start("shutdown", "/r /t 0");  // shutdown and restart
+            //Process.Start("shutdown", "/h /f");    // hibernate
         }
     }
 }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NWindowsKits">
+      <HintPath>J:\VCSharp\NWindowsKits\NWindowsKits\NWindowsKits\bin\Release\net40\NWindowsKits.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
