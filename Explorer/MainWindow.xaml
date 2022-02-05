@@ -23,6 +23,12 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="35"></RowDefinition>
         </Grid.RowDefinitions>
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header = "Change Background" Click="btnChangeBackground_Click"/>
+                <MenuItem Header = "Close Desktop" Click="btnCloseDesktop_Click"></MenuItem>
+            </ContextMenu>
+        </Grid.ContextMenu>
         <Button x:Name="btnClose" Content="Close" VerticalAlignment="Top" 
                 Width="35" HorizontalAlignment="Left"
                 Click="Button_Click"/>
@@ -34,6 +40,9 @@
                     </Setter>
                 </Style>
             </Button.Style>
+        </Button>
+        <Button>
+            
         </Button>
     </Grid>
 </Window>

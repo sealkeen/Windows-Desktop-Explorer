@@ -65,5 +65,28 @@ namespace Explorer
         {
             User32.SendWpfWindowBack(App.MainWindow);
         }
+
+        private void btnChangeBackground_Click(object sender, RoutedEventArgs e)
+        {
+            var fileData = Plugin.FilePicker.CrossFilePicker.Current.PickFile();
+            SetBackground(fileData.Result.FilePath);
+        }
+
+        private void btnCloseDesktop_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void SetBackground(string fileName)
+        {
+            try
+            {
+                explorerGrid.Background = new ImageBrush(
+                    new BitmapImage(
+                    new Uri(fileName)));
+            } catch (Exception ex) { 
+
+            }
+        }
     }
 }
