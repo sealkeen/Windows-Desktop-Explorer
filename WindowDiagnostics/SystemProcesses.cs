@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace WindowDiagnostics
 {
-    public class Class1
+    public class SystemProcesses
     {
         public static void listProcesses()
         {
