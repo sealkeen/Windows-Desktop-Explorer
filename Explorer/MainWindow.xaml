@@ -26,15 +26,11 @@
         <Button x:Name="btnClose" Content="Close" VerticalAlignment="Top" 
                 Width="35" HorizontalAlignment="Left"
                 Click="Button_Click"/>
-        <Button x:Name="btnStart" Grid.Row="2"  Width="60" HorizontalAlignment="Left"
-                 >
+        <Button x:Name="btnStart" Grid.Row="2" Width="60" HorizontalAlignment="Left">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu x:Name="cmPrograms">
-                            </ContextMenu>
-                        </Setter.Value>
+                        <Setter.Value> <ContextMenu x:Name="cmPrograms"></ContextMenu></Setter.Value>
                     </Setter>
                 </Style>
             </Button.Style>
