@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -25,16 +27,25 @@ namespace Explorer
         private static string SettingsFolderPath = Path.Combine(Environment.CurrentDirectory, "Settings");
         private static string SettingsFilePath = Path.Combine(SettingsFolderPath, "settings.xml");
         public static WindowDiagnostics.Program DiagnosticsProgram = new WindowDiagnostics.Program();
+        public static ExplorerLibrary.DirectoryFiles DirectoryFiles = new ExplorerLibrary.DirectoryFiles();
         private static string _dateTime;
+        private static bool _closed = false;
 
         public MainWindow()
         {
             InitializeComponent();
             App.MainWindow = this;
+
             this.lstProcesses.DataContext = DiagnosticsProgram;
+            this.icFiles.DataContext = DirectoryFiles;
+            DirectoryFiles.List();
             DiagnosticsProgram.ListProcesses();
+
             Thread timeThread = new Thread(UpdateTime);
             timeThread.Start();
+
+            //FileInfos[0].DirectoryName
+            icFiles.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -45,7 +56,8 @@ namespace Explorer
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //e.Cancel = true;
+            _closed = true;
+            Application.Current.Shutdown();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -55,7 +67,6 @@ namespace Explorer
                 User32.SendWpfWindowBack(this);
                 ReadSettings();
             //});
-            
         }
 
         private void ReadSettings()
@@ -92,6 +103,11 @@ namespace Explorer
 
         private void explorerGrid_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            explorerGrid_ShowWindows();
+        }
+
+        private void explorerGrid_ShowWindows()
+        {
             User32.SendWpfWindowBack(App.MainWindow);
             DiagnosticsProgram.ListProcesses();
             lstProcesses.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
@@ -123,6 +139,7 @@ namespace Explorer
                 backGroundImage.Value = fileData.Result.FilePath;
                 root.Add(backGroundImage);
                 xD.Save(SettingsFilePath);
+                
                 //sR.WriteLine(backGroundImage);
                 //sR.Close();
             } catch (Exception ex) {
@@ -154,11 +171,15 @@ namespace Explorer
 
         private void btnMinimizeAll_Click(object sender, RoutedEventArgs e)
         {
-            Task.Factory.StartNew(() => 
-                User32.CascadeWindows()
-                //WindowDiagnostics.SystemProcesses.
-                //WindowDiagnostics.SystemProcesses.MinimizeAll()
-                );
+            Task.Factory.StartNew( delegate {
+                User32.CascadeWindows();
+                Thread.Sleep(75);
+                explorerGrid_ShowWindows();
+                }
+            );
+            //WindowDiagnostics.SystemProcesses.
+            //WindowDiagnostics.SystemProcesses.MinimizeAll()
+
         }        
         
         private void btnOpenCMD_Click(object sender, RoutedEventArgs e)
@@ -216,7 +237,7 @@ namespace Explorer
 
         public void UpdateTime()
         {
-            while(true)
+            while(true && !_closed)
             {
                 _dateTime = DateTime.Now.ToShortDateString() + Environment.NewLine + DateTime.Now.ToShortTimeString();
                 this.Dispatcher.BeginInvoke(new Action(delegate
@@ -225,6 +246,16 @@ namespace Explorer
                 }));
                 Thread.Sleep(500);
             }
+        }
+
+        private void btnLogoff_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("shutdown.exe", "-l");
+        }
+
+        private void btnStart_Click(object sender, RoutedEventArgs e)
+        {
+            User32.IncreaseForegroundWindow();
         }
     }
 }

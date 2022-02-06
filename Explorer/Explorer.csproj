@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -106,6 +107,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExplorerLibrary\ExplorerLibrary.csproj">
+      <Project>{294C0FCF-60F5-4FF4-A1AE-3FEE630E6B7B}</Project>
+      <Name>ExplorerLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Win32Interop\Win32Interop.csproj">
       <Project>{CFC78B33-F276-4625-8631-62C0365EFFCF}</Project>
       <Name>Win32Interop</Name>

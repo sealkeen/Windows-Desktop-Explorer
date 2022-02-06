@@ -39,7 +39,6 @@ namespace Win32Interop
 
         static public void TileWindows()
         {
-            
             user32.TileWindows(defHWND, C.MDITILE_HORIZONTAL, ref defRECT, 0, ref defHWND); // "Show windows stacked"
         }
 
@@ -50,15 +49,39 @@ namespace Win32Interop
                 //user32.SetWindowPos
                 //user32.SetWindowPos();
                 //NWindowsKits.NWindowsKits.CascadeWindows();
-                ArrayList aL = new ArrayList();
-                Rectangle rect = new Rectangle(10, 10, 1740, 1010);
-                aL.AddRange(
-                    Process.GetProcesses().Where(x => !x.MainWindowTitle.Contains("Main Window")).ToArray()
+                
+                Rectangle rect = new Rectangle(0, 0, 1740, 1010);
+                var arrayRange = Process.GetProcesses()
+                    .Where(x => 
+                        !string.IsNullOrEmpty(x.MainWindowTitle) &&
+                        !x.MainWindowTitle.Contains("MainWindow")
                     );
-                user32.CascadeWindows(nullptr, C.MDITILE_ZORDER, ref rect, 0, ref aL); // "Cascade windows"
+                    //.Select(x => x.Handle).ToArray();
+
+                int X = 25; int Y = 25;
+                if (arrayRange.Count() > 0)
+                {
+                    var lastProc = arrayRange.First();
+                    foreach (var proc in arrayRange)
+                    {
+                        var хандле = ХВНД.Криейт(proc.MainWindowHandle);
+                        user32.MoveWindow(хандле, X, Y, 735, 635, 1);
+                        X += 18; Y += 18;
+                        lastProc = proc;
+                        user32.ShowWindow(хандле, C.SW_RESTORE); // SW_RESTORE = 9,
+                        user32.SetForegroundWindow(хандле);
+                    }
+                    user32.MoveWindow(ХВНД.Криейт(lastProc.MainWindowHandle), X, Y, 1260, 840, 1);
+                }
+
+                //user32.CascadeWindows(nullptr, 0, ref rect, 0, arrayRange); // "Cascade windows"
             } catch (Exception ex) {
-            
             }
+        }
+        public static void IncreaseForegroundWindow()
+        {
+            var handle = user32.GetForegroundWindow();
+            user32.MoveWindow(handle, 180, 0, 1640, 1080, 1);
         }
     }
 }

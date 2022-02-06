@@ -37,12 +37,16 @@
         <Button x:Name="btnClose" Content="Close" VerticalAlignment="Top" 
                 Width="35" HorizontalAlignment="Left"
                 Click="btnCloseDesktop_Click"/>
-        <Button x:Name="btnStart" Grid.Row="2" Width="60" HorizontalAlignment="Left">
+        <Button x:Name="btnStart" 
+                Grid.Row="2" Width="60" 
+                HorizontalAlignment="Left"
+                Click="btnStart_Click">
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="btnShutdown" Header="Shutdown" Click="btnShutdown_Click"/>
                     <MenuItem x:Name="btnRestart" Header="Restart" Click="btnRestart_Click"/>
                     <MenuItem x:Name="btnHibernate" Header="Hibernate" Click="btnHibernate_Click"/>
+                    <MenuItem x:Name="btnLogoff" Header="Log off" Click="btnLogoff_Click"/>
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>
@@ -77,5 +81,34 @@
                 Width="10" HorizontalAlignment="Right"
                 Click="btnMinimizeAll_Click"
                 />
+        <ItemsControl 
+            Background="#34808F80"
+            x:Name="icFiles" Grid.Row="1" Grid.Column="0" 
+            ItemsSource="{Binding FileIconInfos}">
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel>
+                        
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="White" BorderThickness="1" Margin="4"
+                            Padding="4">
+                        <StackPanel Background="#11808F80" Orientation="Vertical" >
+                            <Image Height="32" Width="50" Source="{Binding IconSource}" />
+                            <Label 
+                                     MaxWidth="50" Foreground="White" FontSize="10" 
+                                     >
+                                <TextBlock Height="50" Text="{Binding FileInfo.Name}" TextWrapping="Wrap">
+                                </TextBlock>
+                            </Label>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>
