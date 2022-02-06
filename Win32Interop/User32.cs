@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -15,10 +18,17 @@ namespace Win32Interop
     {
         public static NWindowsKits.HWND defHWND = default(HWND);
         public static NWindowsKits.RECT defRECT = default(RECT);
-        const UInt32 SWP_NOSIZE = 0x0001;
-        const UInt32 SWP_NOMOVE = 0x0002;
+        public const UInt32 SWP_NOSIZE = 0x0001;
+        public const UInt32 SWP_NOMOVE = 0x0002;
+        public static IntPtr nullptr = IntPtr.Zero;
 
         static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+
+        static public void SwitchToThisWindow(IntPtr window)
+        {
+            var hwnd = ХВНД.Криейт(window);
+            NWindowsKits.user32.SwitchToThisWindow(hwnd, 1);
+        }
 
         static public void SendWpfWindowBack(Window window)
         {
@@ -35,11 +45,20 @@ namespace Win32Interop
 
         static public void CascadeWindows()
         {
+            try
+            {
+                //user32.SetWindowPos
+                //user32.SetWindowPos();
+                //NWindowsKits.NWindowsKits.CascadeWindows();
+                ArrayList aL = new ArrayList();
+                Rectangle rect = new Rectangle(10, 10, 1740, 1010);
+                aL.AddRange(
+                    Process.GetProcesses().Where(x => !x.MainWindowTitle.Contains("Main Window")).ToArray()
+                    );
+                user32.CascadeWindows(nullptr, C.MDITILE_ZORDER, ref rect, 0, ref aL); // "Cascade windows"
+            } catch (Exception ex) {
             
-            //user32.SetWindowPos
-            //user32.SetWindowPos();
-            //NWindowsKits.NWindowsKits.CascadeWindows();
-            //CascadeWindows(NULL, MDITILE_ZORDER, NULL, 0, NULL); // "Cascade windows"
+            }
         }
     }
 }

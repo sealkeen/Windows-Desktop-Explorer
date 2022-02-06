@@ -13,7 +13,7 @@ namespace WindowDiagnostics
 
         public void ListProcesses() 
         {
-            Processes = new ObservableCollection<Process>(SystemProcesses.GetPocesses().OrderByDescending(x => x.MainWindowTitle));
+            Processes = new ObservableCollection<Process>(SystemProcesses.GetPocesses().OrderByDescending(x => x.MainWindowTitle).ThenBy(x => x.Id));
         }
     }
 }

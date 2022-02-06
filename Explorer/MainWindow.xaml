@@ -41,6 +41,8 @@
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="btnShutdown" Header="Shutdown" Click="btnShutdown_Click"/>
+                    <MenuItem x:Name="btnRestart" Header="Restart" Click="btnRestart_Click"/>
+                    <MenuItem x:Name="btnHibernate" Header="Hibernate" Click="btnHibernate_Click"/>
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>
@@ -64,7 +66,14 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Grid.Row="2" Grid.Column="1"
+        
+        <TextBlock x:Name="lblDateTime" Text="10:00 2019-02-30T00:30" Grid.Row="2" Grid.Column="1"
+               HorizontalAlignment="Right" Margin="0,0,10,0" Width="75"
+               TextAlignment="Center"
+               Background="WhiteSmoke" LineStackingStrategy="BlockLineHeight" 
+               >
+        </TextBlock>
+                <Button Grid.Row="2" Grid.Column="1"
                 Width="10" HorizontalAlignment="Right"
                 Click="btnMinimizeAll_Click"
                 />

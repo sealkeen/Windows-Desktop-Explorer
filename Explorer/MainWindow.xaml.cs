@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Linq;
 using Win32Interop;
-using System.Linq;
 
 namespace Explorer
 {
@@ -23,6 +25,7 @@ namespace Explorer
         private static string SettingsFolderPath = Path.Combine(Environment.CurrentDirectory, "Settings");
         private static string SettingsFilePath = Path.Combine(SettingsFolderPath, "settings.xml");
         public static WindowDiagnostics.Program DiagnosticsProgram = new WindowDiagnostics.Program();
+        private static string _dateTime;
 
         public MainWindow()
         {
@@ -30,6 +33,8 @@ namespace Explorer
             App.MainWindow = this;
             this.lstProcesses.DataContext = DiagnosticsProgram;
             DiagnosticsProgram.ListProcesses();
+            Thread timeThread = new Thread(UpdateTime);
+            timeThread.Start();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -149,9 +154,8 @@ namespace Explorer
 
         private void btnMinimizeAll_Click(object sender, RoutedEventArgs e)
         {
-
             Task.Factory.StartNew(() => 
-                User32.TileWindows()
+                User32.CascadeWindows()
                 //WindowDiagnostics.SystemProcesses.
                 //WindowDiagnostics.SystemProcesses.MinimizeAll()
                 );
@@ -166,8 +170,9 @@ namespace Explorer
         {
             try
             {
-                var proc = (lstProcesses.SelectedItem as System.Diagnostics.Process);
-                Win32Interop.User32.SwitchToThisWindow(proc.MainWindowHandle, true);
+                var proc = (lstProcesses.SelectedItem as System.Diagnostics.Process).MainWindowHandle;
+                
+                Win32Interop.User32.SwitchToThisWindow(proc);
             }
             catch { }
         }
@@ -197,8 +202,29 @@ namespace Explorer
                 App.Current.MainWindow.WindowState = WindowState.Maximized;
             else
                 App.Current.MainWindow.WindowState = WindowState.Normal;
-            //Process.Start("shutdown", "/r /t 0");  // shutdown and restart
-            //Process.Start("shutdown", "/h /f");    // hibernate
+        }
+
+        private void btnRestart_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("shutdown", "/r /t 0");  // shutdown and restart
+        }
+
+        private void btnHibernate_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("shutdown", "/h /f");    // hibernate
+        }
+
+        public void UpdateTime()
+        {
+            while(true)
+            {
+                _dateTime = DateTime.Now.ToShortDateString() + Environment.NewLine + DateTime.Now.ToShortTimeString();
+                this.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    lblDateTime.Text = _dateTime;
+                }));
+                Thread.Sleep(500);
+            }
         }
     }
 }
