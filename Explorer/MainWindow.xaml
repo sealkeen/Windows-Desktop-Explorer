@@ -4,6 +4,7 @@
         Title="MainWindow" Height="350" Width="625"
         WindowStyle="None" WindowState="Maximized"
         Closing="Window_Closing" Loaded="Window_Loaded"
+        xmlns:uc="clr-namespace:ExplorerLibrary;assembly=ExplorerLibrary"
         >
     <Grid x:Name="explorerGrid" MouseLeftButtonDown="explorerGrid_MouseRightButtonDown">
         <Grid.Background>
@@ -82,10 +83,10 @@
                 Click="btnMinimizeAll_Click"
                 />
         <ItemsControl 
+            MouseDoubleClick="icFiles_MouseDoubleClick"
             Background="#34808F80"
             x:Name="icFiles" Grid.Row="1" Grid.Column="0" 
             ItemsSource="{Binding FileIconInfos}">
-
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel>
@@ -95,17 +96,27 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="White" BorderThickness="1" Margin="4"
+                    <Border BorderBrush="Gray" BorderThickness="1" Margin="4"
                             Padding="4">
-                        <StackPanel Background="#11808F80" Orientation="Vertical" >
-                            <Image Height="32" Width="50" Source="{Binding IconSource}" />
+                        <uc:FileStackPanel 
+                            x:Class="ExplorerLibrary.FileStackPanel"
+                            MouseLeave="StackPanel_MouseLeave"
+                                    MouseEnter="StackPanel_MouseEnter"
+                            Background="#11808F80" Orientation="Vertical">
+                            <Button x:Name="btnIconButton"
+                                    Height="30" Width="30"
+                                    Click="btnIconButton_Click">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="{Binding IconSource}"/>
+                                </Button.Background>
+                            </Button>
                             <Label 
                                      MaxWidth="50" Foreground="White" FontSize="10" 
                                      >
                                 <TextBlock Height="50" Text="{Binding FileInfo.Name}" TextWrapping="Wrap">
                                 </TextBlock>
                             </Label>
-                        </StackPanel>
+                        </uc:FileStackPanel>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

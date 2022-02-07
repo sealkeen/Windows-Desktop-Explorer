@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -13,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xaml;
 using System.Xml;
 using System.Xml.Linq;
 using Win32Interop;
@@ -256,6 +256,36 @@ namespace Explorer
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             User32.IncreaseForegroundWindow();
+        }
+
+        private void StackPanel_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            try
+            {
+                BrushConverter bc = new BrushConverter();
+                (sender as StackPanel).Background = (Brush)bc.ConvertFrom("#00808F80");
+            }
+            catch { }
+        }
+
+        private void StackPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            try
+            {
+                BrushConverter bc = new BrushConverter();
+                (sender as StackPanel).Background = (Brush)bc.ConvertFrom("#11808F80");
+            }
+            catch { }
+        }
+
+        private void btnIconButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender.GetType();
+        }
+
+        private void icFiles_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //icFiles.
         }
     }
 }
