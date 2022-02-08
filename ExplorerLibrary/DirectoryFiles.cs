@@ -12,12 +12,17 @@ namespace ExplorerLibrary
     {
         public ObservableCollection<FileIconInfo> FileIconInfos { get; set; }
 
+        public FileIconInfo CurrentFileIconInfo { get { return FileIconInfos[SelectedIndex]; } }
+
+        public int SelectedIndex { get; set; }
+
         public void List()
         {
             DirectoryInfo dI = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             FileIconInfos = new ObservableCollection<FileIconInfo>(
                 FileIconInfo.ToFileIconInfos(dI.GetFiles())
                 );
+
             foreach (FileIconInfo fi in FileIconInfos)
             {
                 fi.Icon = (System.Drawing.Icon.ExtractAssociatedIcon(fi.FileInfo.FullName));

@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="UserControls.FileControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:uc="clr-namespace:UserControls;assembly=WPFUserControls"
+             xmlns:local="clr-namespace:UserControls"
+             x:Name="fileControl"
+             >
+    <UserControl.Resources>
+        <local:BindingProxy x:Key="BindingProxy" 
+         Data="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"/>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel Background="#11808F80" Orientation="Vertical">
+            <Button Command="{Binding Data.MyCommand, Source={StaticResource BindingProxy}}"
+                                x:Name="btnIconButton"
+                                Height="30" Width="30"
+                    
+                    >
+                <!--<local:Interaction.Triggers>
+                    <local:EventTrigger EventName="Click">
+                        <local:SetterAction PropertyName="Visibility" Value="Collapsed" />
+                        <local:SetterAction PropertyName="Visibility" TargetObject="{Binding ElementName=optionsBackButton}" Value="Visible" />
+                        <local:SetterAction PropertyName="Visibility" TargetObject="{Binding ElementName=optionsPanel}" Value="Visible" />
+                    </local:EventTrigger>
+                </local:Interaction.Triggers>-->
+                <Button.Background>
+                    <ImageBrush ImageSource="{Binding IconSource}"/>
+                </Button.Background>
+            </Button>
+            <Label MaxWidth="50" Foreground="White" FontSize="10">
+                <TextBlock TextWrapping="Wrap" Height="50" Text="{Binding FileInfo.Name}"/>
+            </Label>
+        </StackPanel>
+    </Grid>
+</UserControl>

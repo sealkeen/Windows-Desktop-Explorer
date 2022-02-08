@@ -36,16 +36,19 @@ namespace Explorer
             InitializeComponent();
             App.MainWindow = this;
 
-            this.lstProcesses.DataContext = DiagnosticsProgram;
-            this.icFiles.DataContext = DirectoryFiles;
             DirectoryFiles.List();
             DiagnosticsProgram.ListProcesses();
 
+            this.lstProcesses.DataContext = DiagnosticsProgram;
+            this.ucFiles.DataContext = DirectoryFiles;
+            
             Thread timeThread = new Thread(UpdateTime);
             timeThread.Start();
 
-            //FileInfos[0].DirectoryName
-            icFiles.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+            //Task.Factory.StartNew(() => 
+             ucFiles.GetBindingExpression(UserControls.FileStackPanel.ItemsSourceProperty).UpdateTarget();
+            //);
+             ucFiles.OnItemsSourceChanged(DirectoryFiles.FileIconInfos, DirectoryFiles.FileIconInfos);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -286,6 +289,10 @@ namespace Explorer
         private void icFiles_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             //icFiles.
+        }
+
+        private void fileStackPanel_Loaded(object sender, EventArgs e)
+        {
         }
     }
 }

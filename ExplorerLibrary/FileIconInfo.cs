@@ -14,9 +14,21 @@ namespace ExplorerLibrary
 {
     public class FileIconInfo
     {
+        FileIconInfo()
+        {
+            ItemIndex = MaxItemIndex++;
+        }
+
         public Icon Icon {get;set;}
         public FileInfo FileInfo {get;set;}
         public ImageSource IconSource {get;set;}
+        public static int ItemIndex { get; set; }
+        public static int MaxItemIndex = 0;
+
+        public void OpenFile()
+        {
+            System.Diagnostics.Process.Start(FileInfo.FullName);
+        }
 
         public static FileIconInfo[] ToFileIconInfos(FileInfo[] infos)
         {

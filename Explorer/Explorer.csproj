@@ -119,6 +119,10 @@
       <Project>{08CF6899-D6BA-44B9-967F-774699D917B2}</Project>
       <Name>WindowDiagnostics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WPFUserControls\WPFUserControls.csproj">
+      <Project>{116DDAF5-A385-459E-BAEB-B2EAD89D6003}</Project>
+      <Name>WPFUserControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

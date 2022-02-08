@@ -1,11 +1,15 @@
 ﻿<Window x:Class="Explorer.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="625"
         WindowStyle="None" WindowState="Maximized"
         Closing="Window_Closing" Loaded="Window_Loaded"
-        xmlns:uc="clr-namespace:ExplorerLibrary;assembly=ExplorerLibrary"
+        xmlns:uc="clr-namespace:UserControls;assembly=WPFUserControls"
         >
+    <!--<Window.Resources>-->
+        <!--<uc:FileStackPanel x:Key="DirFiles"/>-->
+        <!--<uc:FileIconInfo x:Key="FIInfo"/>
+        <uc:FileStackPanel x:Key="FSp"/>-->
+    <!--</Window.Resources>-->
     <Grid x:Name="explorerGrid" MouseLeftButtonDown="explorerGrid_MouseRightButtonDown">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -82,15 +86,15 @@
                 Width="10" HorizontalAlignment="Right"
                 Click="btnMinimizeAll_Click"
                 />
-        <ItemsControl 
-            MouseDoubleClick="icFiles_MouseDoubleClick"
+        <!--<ItemsControl DataContext="{Binding DirectoryFiles}"
             Background="#34808F80"
             x:Name="icFiles" Grid.Row="1" Grid.Column="0" 
-            ItemsSource="{Binding FileIconInfos}">
+            ItemsSource="{Binding FileIconInfos}"
+            >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel>
-                        
+
                     </WrapPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
@@ -98,28 +102,28 @@
                 <DataTemplate>
                     <Border BorderBrush="Gray" BorderThickness="1" Margin="4"
                             Padding="4">
-                        <uc:FileStackPanel 
-                            x:Class="ExplorerLibrary.FileStackPanel"
-                            MouseLeave="StackPanel_MouseLeave"
-                                    MouseEnter="StackPanel_MouseEnter"
-                            Background="#11808F80" Orientation="Vertical">
+                        <StackPanel 
+                        Background="#11808F80" Orientation="Vertical">
                             <Button x:Name="btnIconButton"
-                                    Height="30" Width="30"
-                                    Click="btnIconButton_Click">
+                                                    Height="30" Width="30">
                                 <Button.Background>
                                     <ImageBrush ImageSource="{Binding IconSource}"/>
                                 </Button.Background>
                             </Button>
-                            <Label 
-                                     MaxWidth="50" Foreground="White" FontSize="10" 
-                                     >
-                                <TextBlock Height="50" Text="{Binding FileInfo.Name}" TextWrapping="Wrap">
-                                </TextBlock>
+                            <Label MaxWidth="50" Foreground="White" FontSize="10">
+                                <TextBlock Height="50" Text="{Binding FileInfo.Name}" TextWrapping="Wrap"/>
                             </Label>
-                        </uc:FileStackPanel>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </ItemsControl>-->
+        <uc:FileStackPanel x:Name="ucFiles" 
+            Grid.Row = "1" Grid.Column="0"
+            DataContext = "{Binding DirectoryFiles}"
+            ItemsSource = "{Binding FileIconInfos}"
+            MouseDoubleClick = "icFiles_MouseDoubleClick"
+            Initialized = "fileStackPanel_Loaded" >
+        </uc:FileStackPanel>
     </Grid>
 </Window>
