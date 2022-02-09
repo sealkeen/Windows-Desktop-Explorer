@@ -8,16 +8,14 @@
              x:Name="fileControl"
              >
     <UserControl.Resources>
-        <local:BindingProxy x:Key="BindingProxy" 
+        <local:BindingProxy x:Key="BindingProxy"
          Data="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"/>
     </UserControl.Resources>
     <Grid>
         <StackPanel Background="#11808F80" Orientation="Vertical">
             <Button Command="{Binding Data.MyCommand, Source={StaticResource BindingProxy}}"
                                 x:Name="btnIconButton"
-                                Height="30" Width="30"
-                    
-                    >
+                                Height="30" Width="30">
                 <!--<local:Interaction.Triggers>
                     <local:EventTrigger EventName="Click">
                         <local:SetterAction PropertyName="Visibility" Value="Collapsed" />

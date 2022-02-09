@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace UserControls
         public FileControl()
         {
             InitializeComponent();
+            ItemIndex = MaxIndex++;
         }
 
         public int ItemIndex { get; set; }
@@ -37,6 +39,16 @@ namespace UserControls
 
         public static readonly DependencyProperty FileIconInfoProperty =
             DependencyProperty.Register("FileIconInfo", typeof(FileIconInfo),
-            typeof(FileControl), new UIPropertyMetadata(null));   
+            typeof(FileControl), new UIPropertyMetadata(null));
+
+        public IEnumerable ItemsSource
+        {
+            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register("ItemsSource", typeof(DirectoryFiles), typeof(FileControl), new PropertyMetadata(null));
+
+
     }
 }

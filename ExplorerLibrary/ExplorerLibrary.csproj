@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DirectoryFiles.cs" />
+    <Compile Include="DirectoryStore.cs" />
     <Compile Include="FileIconInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

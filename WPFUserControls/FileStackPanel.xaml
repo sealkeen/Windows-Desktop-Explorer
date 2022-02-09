@@ -25,7 +25,11 @@
             <DataTemplate>
                 <Border BorderBrush="Gray" BorderThickness="1" Margin="4"
                             Padding="4">
-                    <local:FileControl x:Name="ucFileControl" ItemIndex="{Binding ItemIndex}">
+                    <local:FileControl x:Name="ucFileControl"
+                                       ItemIndex="{Binding ItemIndex}"
+                                       ItemsSource="{Binding ItemsSource}"
+                                       MouseDoubleClick="ucFileControl_MouseDoubleClick"
+                                       >
                         
                     </local:FileControl>
                 </Border>

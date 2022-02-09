@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -14,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xaml;
-using System.Collections.ObjectModel;
 using ExplorerLibrary;
 
 namespace UserControls
@@ -38,6 +39,7 @@ namespace UserControls
             if (control != null)
                 control.OnItemsSourceChanged((IEnumerable)e.OldValue, (IEnumerable)e.NewValue);
         }
+
         public void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
             // Remove handler for oldValue.CollectionChanged
@@ -81,5 +83,11 @@ namespace UserControls
             DependencyProperty.Register("ClickedItem", typeof(FileIconInfo), 
             typeof(FileStackPanel), new PropertyMetadata(null));
 
+        private void ucFileControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var dataContext = ((DirectoryFiles)this.GetValue(DataContextProperty));
+            dataContext.SelectedIndex = (sender as FileControl).ItemIndex;
+            Process.Start(dataContext.CurrentFileIconInfo.FileInfo.FullName);
+        }
     }
 }
