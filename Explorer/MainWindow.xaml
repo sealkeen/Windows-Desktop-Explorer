@@ -5,15 +5,16 @@
         Closing="Window_Closing" Loaded="Window_Loaded"
         xmlns:uc="clr-namespace:UserControls;assembly=WPFUserControls"
         >
-    <!--<Window.Resources>-->
+    <Window.Resources>
+        <uc:BindingProxy x:Key="Proxy" Data="{Binding DirectoryFiles}" />
         <!--<uc:FileStackPanel x:Key="DirFiles"/>-->
         <!--<uc:FileIconInfo x:Key="FIInfo"/>
         <uc:FileStackPanel x:Key="FSp"/>-->
-    <!--</Window.Resources>-->
+    </Window.Resources>
     <Grid x:Name="explorerGrid" MouseLeftButtonDown="explorerGrid_MouseRightButtonDown">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF08C0F0" Offset="0"/>
+                <GradientStop Color="#AA081210" Offset="0"/>
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
@@ -37,7 +38,7 @@
                 <MenuItem Header = "Open Explorer" Click="btnOpenExplorer_Click"></MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
-        <GridSplitter Grid.RowSpan="2" Grid.Column ="0" Background="Gray" Width="2"
+        <GridSplitter Grid.RowSpan="2" Grid.Column ="0" Background="Gray" Width="4"
                 HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
         <Button x:Name="btnClose" Content="Close" VerticalAlignment="Top" 
                 Width="35" HorizontalAlignment="Left"

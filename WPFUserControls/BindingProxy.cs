@@ -18,13 +18,13 @@ namespace UserControls
             return new BindingProxy();
         }
 
-        public FileIconInfo Data
+        public DirectoryFiles Data
         {
-            get { return (FileIconInfo)GetValue(DataProperty); }
+            get { return (DirectoryFiles)GetValue(DataProperty); }
             set { SetValue(DataProperty, value); }
         }
 
         public static readonly DependencyProperty DataProperty =
-            DependencyProperty.Register("Data", typeof(FileIconInfo), typeof(BindingProxy));
+            DependencyProperty.Register("Data", typeof(DirectoryFiles), typeof(BindingProxy));
     }
 }

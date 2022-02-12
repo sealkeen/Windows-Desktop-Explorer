@@ -13,5 +13,16 @@ namespace Explorer
     public partial class App : Application
     {
         public static MainWindow MainWindow;
+
+        static public string Directory { get; set; }
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            Directory = "";
+            string [] args = e.Args;
+            if (args != null && args.Length > 0 && System.IO.Directory.Exists(args[0]))
+            {
+                Directory = args[0];
+            }
+        }
     }
 }

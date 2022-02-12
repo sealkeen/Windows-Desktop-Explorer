@@ -4,16 +4,17 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using ObjectModelExtensions;
 
 namespace WindowDiagnostics
 {
     public class Program
     {
-        public ObservableCollection<Process> Processes { get; set; }
+        public ConcurrentObservableCollection<Process> Processes { get; set; }
 
         public void ListProcesses() 
         {
-            Processes = new ObservableCollection<Process>(SystemProcesses.GetPocesses().OrderByDescending(x => x.MainWindowTitle).ThenBy(x => x.Id));
+            Processes = new ConcurrentObservableCollection<Process>(SystemProcesses.GetPocesses().OrderByDescending(x => x.MainWindowTitle).ThenBy(x => x.Id));
         }
     }
 }

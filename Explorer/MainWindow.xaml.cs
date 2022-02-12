@@ -16,6 +16,7 @@ using System.Xaml;
 using System.Xml;
 using System.Xml.Linq;
 using Win32Interop;
+using WPFUserControls;
 
 namespace Explorer
 {
@@ -26,29 +27,23 @@ namespace Explorer
     {
         private static string SettingsFolderPath = Path.Combine(Environment.CurrentDirectory, "Settings");
         private static string SettingsFilePath = Path.Combine(SettingsFolderPath, "settings.xml");
-        public static WindowDiagnostics.Program DiagnosticsProgram = new WindowDiagnostics.Program();
-        public static ExplorerLibrary.DirectoryFiles DirectoryFiles = new ExplorerLibrary.DirectoryFiles();
         private static string _dateTime;
         private static bool _closed = false;
-
+        public static ProcessesViewModel ProcessesViewModel { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             App.MainWindow = this;
-
-            DirectoryFiles.List();
-            DiagnosticsProgram.ListProcesses();
-
-            this.lstProcesses.DataContext = DiagnosticsProgram;
-            this.ucFiles.DataContext = DirectoryFiles;
+            ProcessesViewModel = new ProcessesViewModel();
+            this.lstProcesses.DataContext = ProcessesViewModel.DiagnosticsProgram;
             
             Thread timeThread = new Thread(UpdateTime);
             timeThread.Start();
 
+            ucFiles.UpdateViewModelDataContext(App.Directory);
             //Task.Factory.StartNew(() => 
-             ucFiles.GetBindingExpression(UserControls.FileStackPanel.ItemsSourceProperty).UpdateTarget();
+            ucFiles.GetBindingExpression(UserControls.FileStackPanel.ItemsSourceProperty).UpdateTarget();
             //);
-             ucFiles.OnItemsSourceChanged(DirectoryFiles.FileIconInfos, DirectoryFiles.FileIconInfos);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -112,7 +107,7 @@ namespace Explorer
         private void explorerGrid_ShowWindows()
         {
             User32.SendWpfWindowBack(App.MainWindow);
-            DiagnosticsProgram.ListProcesses();
+            ProcessesViewModel.DiagnosticsProgram.ListProcesses();
             lstProcesses.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
@@ -204,7 +199,7 @@ namespace Explorer
         private void lstProcesses_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             //User32.SendWpfWindowBack(App.MainWindow);
-            DiagnosticsProgram.ListProcesses();
+            ProcessesViewModel.DiagnosticsProgram.ListProcesses();
             lstProcesses.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
@@ -288,11 +283,12 @@ namespace Explorer
 
         private void icFiles_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //icFiles.
+            
         }
 
         private void fileStackPanel_Loaded(object sender, EventArgs e)
         {
+
         }
     }
 }

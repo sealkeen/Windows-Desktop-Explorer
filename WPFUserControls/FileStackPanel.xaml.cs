@@ -17,6 +17,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xaml;
 using ExplorerLibrary;
+using ObjectModelExtensions;
+using System.IO;
+using WPFUserControls;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace UserControls
 {
@@ -25,6 +30,46 @@ namespace UserControls
     /// </summary>
     public partial class FileStackPanel : UserControl
     {
+        public static ViewModelBase ViewModel { get; set; }
+        public FileStackPanel()
+        {
+            InitializeComponent();
+            //Binding binding = new Binding("ItemsSource");
+            //binding.Source = this;
+            //icFiles.SetBinding(ComboBox.ItemsSourceProperty, binding);
+            //icFiles.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+        }
+
+        public void UpdateViewModelDataContext(string directory = "")
+        {
+            if (directory == "" || !Directory.Exists(directory))
+                directory = Environment.SpecialFolder.DesktopDirectory.ToString();
+            FileControl.MaxIndex = 0;
+
+            var task = Task.Factory.StartNew( delegate
+                {
+                    this.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        ViewModel = new ViewModelBase();
+                        ViewModel.DirectoryFiles = new DirectoryFiles(directory);
+                        DataContext = ViewModel.DirectoryFiles;
+                        var fii = ViewModel.DirectoryFiles.FileIconInfos;
+                        ViewModel.DirectoryFiles.List(directory);
+                    }));
+                }
+            );
+            task.Wait();
+            task.ContinueWith(delegate
+                {
+                    this.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        this.OnItemsSourceChanged(ViewModel.DirectoryFiles.FileIconInfos, ViewModel.DirectoryFiles.FileIconInfos);
+                    }));
+                }
+            );//icFiles.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            //task.Wait();
+        }
+
         public IEnumerable ItemsSource
         {
             get { return (IEnumerable)GetValue(ItemsSourceProperty); }
@@ -43,7 +88,7 @@ namespace UserControls
         public void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
             // Remove handler for oldValue.CollectionChanged
-            var oldValueINotifyCollectionChanged = oldValue as ObservableCollection<FileIconInfo>;
+            var oldValueINotifyCollectionChanged = oldValue as ConcurrentObservableCollection<FileIconInfo>;
 
             if (null != oldValueINotifyCollectionChanged)
             {
@@ -65,14 +110,6 @@ namespace UserControls
 
             this.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
-        public FileStackPanel()
-        {
-            InitializeComponent();
-            //Binding binding = new Binding("ItemsSource");
-            //binding.Source = this;
-            //icFiles.SetBinding(ComboBox.ItemsSourceProperty, binding);
-            //icFiles.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-        }
 
         public FileIconInfo ClickedItem
         {
@@ -87,7 +124,25 @@ namespace UserControls
         {
             var dataContext = ((DirectoryFiles)this.GetValue(DataContextProperty));
             dataContext.SelectedIndex = (sender as FileControl).ItemIndex;
-            Process.Start(dataContext.CurrentFileIconInfo.FileInfo.FullName);
+            //if (dataContext.CurrentFileIconInfo.FileInfo.Attributes.HasFlag(FileAttributes.Directory))
+            //Process.Start(dataContext.CurrentFileIconInfo.FileInfo.FullName);
+
+            if (dataContext.CurrentFileIconInfo.FileInfo.Attributes.HasFlag(FileAttributes.Directory))
+            {
+                UpdateViewModelDataContext(dataContext.CurrentFileIconInfo.FileInfo.FullName);
+            }
+            else
+                Process.Start(dataContext.CurrentFileIconInfo.FileInfo.FullName);
+        }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            DirectoryInfo newDirectory = new DirectoryInfo(ViewModel.DirectoryFiles.DirectoryInfo.FullName);
+            if (newDirectory.Parent == null)
+                return;
+            string parent = newDirectory.Parent.FullName;
+            if(Directory.Exists(parent))
+                UpdateViewModelDataContext(parent);
         }
     }
 }
