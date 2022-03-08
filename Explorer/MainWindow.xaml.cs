@@ -290,5 +290,47 @@ namespace Explorer
         {
 
         }
+
+        private void btnToggleTransparency_Click(object sender, RoutedEventArgs e)
+        {
+            explorerGrid.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+
+            XDocument xD; XElement root;
+            var elements = SettingsReader.GetElements(SettingsFilePath);
+            if (elements.Count() == 0)
+            {
+                root = new XElement("BackgroundImages");
+                xD = new XDocument();
+                xD.Add(root);
+            }
+            else
+            {
+                xD = XDocument.Load(SettingsFilePath);
+                root = xD.Elements().First();
+            }
+
+            var trnsp = root.Elements().Where(elm => elm.Name == "Transparent");
+            if (trnsp.Count() != 0)
+            {
+                if (trnsp.First().Value == "true")
+                    trnsp.First().Value = "false";
+                else
+                    trnsp.First().Value = "true";
+            }
+            else
+            {
+                root.Add(new XElement("Transparent", "true"));
+            }
+            xD.Save(SettingsFilePath);
+        }
+
+        private void btnDesktopBackground_Click_Click(object sender, RoutedEventArgs e)
+        {
+            var fileData = Plugin.FilePicker.CrossFilePicker.Current.PickFile();
+            if (fileData.Result != null)
+                if(File.Exists(fileData.Result.FilePath))
+                    Wallpaper.Set(new Uri(fileData.Result.FilePath), Wallpaper.Style.Tiled);
+
+        }
     }
 }

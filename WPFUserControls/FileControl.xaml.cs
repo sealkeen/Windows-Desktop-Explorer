@@ -50,5 +50,14 @@ namespace UserControls
             DependencyProperty.Register("ItemsSource", typeof(DirectoryFiles), typeof(FileControl), new PropertyMetadata(null));
 
 
+        private void btnTakeOwnership_Click(object sender, RoutedEventArgs e)
+        {
+            AccessController.TakeOwnership(FileIconInfo.FileInfo.FullName);
+        }
+
+        private void btnIconButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            AccessController.TakeOwnership(FileIconInfo.FileInfo.FullName);
+        }
     }
 }

@@ -7,8 +7,9 @@
              x:Name="userControlName"
              xmlns:uc="clr-namespace:UserControls;assembly=WPFUserControls"
              xmlns:local="clr-namespace:UserControls"
+             Background="Transparent"
              >
-    <Grid>
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <!--<RowDefinition Height="20" />-->
             <RowDefinition Height="24"></RowDefinition>
@@ -27,9 +28,11 @@
         <ScrollViewer Grid.ColumnSpan="2" Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ItemsControl 
                 DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
-                Background="#34808F80"
-                x:Name="icFiles" >
-                <!--ItemsSource="{Binding FileIconInfos, ElementName=userControlName}"ItemsSource="{Binding FileIconInfos, ElementName=userControlName}"-->
+                Background="Transparent"
+                x:Name="icFiles" 
+                PreviewMouseWheel="icFiles_PreviewMouseWheel"
+                >
+                <!--Background="#34808F80" ItemsSource="{Binding FileIconInfos, ElementName=userControlName}"ItemsSource="{Binding FileIconInfos, ElementName=userControlName}"-->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel>
@@ -42,7 +45,8 @@
                             <local:FileControl x:Name="ucFileControl"
                                                ItemIndex="{Binding ItemIndex}"
                                                ItemsSource="{Binding ItemsSource}"
-                                               MouseDoubleClick="ucFileControl_MouseDoubleClick" >
+                                               MouseDoubleClick="ucFileControl_MouseDoubleClick" 
+                                               >
                             </local:FileControl>
                         </Border>
                     </DataTemplate>

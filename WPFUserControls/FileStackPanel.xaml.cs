@@ -144,5 +144,27 @@ namespace UserControls
             if(Directory.Exists(parent))
                 UpdateViewModelDataContext(parent);
         }
+
+        private void icFiles_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers != ModifierKeys.Control)
+                return;
+
+            if (e.Delta > 0)
+                ZoomIn();
+
+            else if (e.Delta < 0)
+                ZoomOut();
+        }
+
+        private void ZoomIn()
+        {
+            
+        }
+
+        private void ZoomOut()
+        {
+
+        }
     }
 }

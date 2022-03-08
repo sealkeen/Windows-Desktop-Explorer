@@ -1,23 +1,28 @@
 ﻿<Window x:Class="Explorer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="625"
+        Title="MainWindow" 
         WindowStyle="None" WindowState="Maximized"
         Closing="Window_Closing" Loaded="Window_Loaded"
         xmlns:uc="clr-namespace:UserControls;assembly=WPFUserControls"
+        Background="Transparent"
+        AllowsTransparency="True"
         >
+    <!--<Window.Background>
+        <Background="Transparent"/>
+    </Window.Background>-->
     <Window.Resources>
         <uc:BindingProxy x:Key="Proxy" Data="{Binding DirectoryFiles}" />
-        <!--<uc:FileStackPanel x:Key="DirFiles"/>-->
-        <!--<uc:FileIconInfo x:Key="FIInfo"/>
-        <uc:FileStackPanel x:Key="FSp"/>-->
+        <SolidColorBrush x:Key="StackOverflowGray" Color="LightGray" Opacity=".3" />
     </Window.Resources>
-    <Grid x:Name="explorerGrid" MouseLeftButtonDown="explorerGrid_MouseRightButtonDown">
-        <Grid.Background>
+    <Grid x:Name="explorerGrid" MouseLeftButtonDown="explorerGrid_MouseRightButtonDown"
+          Background="Transparent">
+        <!--<Grid.Background>
+            <SolidColorBrush Opacity="0.8" Color="White"/>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#AA081210" Offset="0"/>
-                <GradientStop Color="White" Offset="1"/>
+                <GradientStop Color="#00081210" Offset="0"/>
+                <GradientStop Color="#09999999" Offset="1"/>
             </LinearGradientBrush>
-        </Grid.Background>
+        </Grid.Background>-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="320"/>
@@ -31,7 +36,9 @@
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header = "Full screen" Click="btnFullScreen_Click"/>
+                <MenuItem Header = "Toggle Transparency" Click="btnToggleTransparency_Click"/>
                 <MenuItem Header = "Change Background" Click="btnChangeBackground_Click"/>
+                <MenuItem Header = "Desktop Background" Click="btnDesktopBackground_Click_Click"/>
                 <MenuItem Header = "Close Desktop" Click="btnCloseDesktop_Click"></MenuItem>
                 <MenuItem Header = "Open task manager" Click="btnOpenTaskManager_Click"/>
                 <MenuItem Header = "Open Cmd" Click="btnOpenCMD_Click"> </MenuItem>
