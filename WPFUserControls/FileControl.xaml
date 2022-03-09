@@ -6,6 +6,7 @@
              xmlns:uc="clr-namespace:UserControls;assembly=WPFUserControls"
              xmlns:local="clr-namespace:UserControls"
              x:Name="fileControl"
+             PreviewMouseWheel="fileControl_PreviewMouseWheel"
              >
     <UserControl.Resources>
         <local:BindingProxy x:Key="BindingProxy"
@@ -13,10 +14,12 @@
     </UserControl.Resources>
     <Grid>
 
-        <StackPanel Background="#11808F80" Orientation="Vertical">
+        <StackPanel Background="#11808F80" Orientation="Vertical"
+                    >
             <Button Command="{Binding Data.MyCommand, Source={StaticResource BindingProxy}}"
                                 x:Name="btnIconButton"
-                                Height="30" Width="30"
+                    Height="{Binding IconHeight}"
+                    Width="{Binding IconWidth}"
                     MouseRightButtonDown="btnIconButton_MouseRightButtonDown">
                 <!--<local:Interaction.Triggers>
                     <local:EventTrigger EventName="Click">

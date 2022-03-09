@@ -17,6 +17,10 @@ using System.Xml;
 using System.Xml.Linq;
 using Win32Interop;
 using WPFUserControls;
+using System.Windows.Input;
+using UserControls;
+using ExplorerLibrary;
+using ObjectModelExtensions;
 
 namespace Explorer
 {
@@ -32,6 +36,8 @@ namespace Explorer
         public static ProcessesViewModel ProcessesViewModel { get; set; }
         public MainWindow()
         {
+            FileIconInfo._iconHeight = 40;
+            FileIconInfo._iconWidth = 40;
             InitializeComponent();
             App.MainWindow = this;
             ProcessesViewModel = new ProcessesViewModel();
@@ -331,6 +337,46 @@ namespace Explorer
                 if(File.Exists(fileData.Result.FilePath))
                     Wallpaper.Set(new Uri(fileData.Result.FilePath), Wallpaper.Style.Tiled);
 
+        }
+
+        private void icFiles_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers != ModifierKeys.Control)
+                return;
+
+            if (e.Delta > 0)
+                ZoomIn();
+
+            else if (e.Delta < 0)
+                ZoomOut();
+        }
+
+        private void ZoomIn()
+        {
+            EnumerableExtensions.ForEach<FileIconInfo>(FileStackPanel.ViewModel.DirectoryFiles.FileIconInfos, ZoomIn);
+            ucFiles.OnItemsSourceChanged(FileStackPanel.ViewModel.DirectoryFiles.FileIconInfos,
+                FileStackPanel.ViewModel.DirectoryFiles.FileIconInfos);
+            ucFiles.GetBindingExpression(UserControls.FileStackPanel.ItemsSourceProperty).UpdateTarget();
+        }
+
+        private void ZoomIn(FileIconInfo fi)
+        {
+            FileIconInfo._iconHeight += 1;
+            FileIconInfo._iconWidth += 1;
+        }
+
+        private void ZoomOut()
+        {
+            EnumerableExtensions.ForEach<FileIconInfo>(FileStackPanel.ViewModel.DirectoryFiles.FileIconInfos, ZoomOut);
+            ucFiles.OnItemsSourceChanged(FileStackPanel.ViewModel.DirectoryFiles.FileIconInfos, 
+                FileStackPanel.ViewModel.DirectoryFiles.FileIconInfos);
+            ucFiles.GetBindingExpression(UserControls.FileStackPanel.ItemsSourceProperty).UpdateTarget();
+        }
+
+        private void ZoomOut(FileIconInfo fi)
+        {
+            FileIconInfo._iconHeight -= 1;
+            FileIconInfo._iconWidth -= 1;
         }
     }
 }

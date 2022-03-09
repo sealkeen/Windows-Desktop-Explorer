@@ -30,6 +30,7 @@ namespace UserControls
     /// </summary>
     public partial class FileStackPanel : UserControl
     {
+        public static string LastDirectory = Environment.SpecialFolder.DesktopDirectory.ToString();
         public static ViewModelBase ViewModel { get; set; }
         public FileStackPanel()
         {
@@ -68,6 +69,7 @@ namespace UserControls
                 }
             );//icFiles.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
             //task.Wait();
+            LastDirectory = directory;
         }
 
         public IEnumerable ItemsSource
@@ -89,7 +91,6 @@ namespace UserControls
         {
             // Remove handler for oldValue.CollectionChanged
             var oldValueINotifyCollectionChanged = oldValue as ConcurrentObservableCollection<FileIconInfo>;
-
             if (null != oldValueINotifyCollectionChanged)
             {
                 oldValueINotifyCollectionChanged.CollectionChanged -= new NotifyCollectionChangedEventHandler(newValueINotifyCollectionChanged_CollectionChanged);
@@ -107,7 +108,6 @@ namespace UserControls
         {
             //Do your stuff here.
             //icFiles.ItemsSource = newValue;
-
             this.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
@@ -116,6 +116,7 @@ namespace UserControls
             get { return (FileIconInfo)GetValue(ClickedItemProperty); }
             set { value.OpenFile(); }
         }
+
         public static readonly DependencyProperty ClickedItemProperty =
             DependencyProperty.Register("ClickedItem", typeof(FileIconInfo), 
             typeof(FileStackPanel), new PropertyMetadata(null));
@@ -126,7 +127,6 @@ namespace UserControls
             dataContext.SelectedIndex = (sender as FileControl).ItemIndex;
             //if (dataContext.CurrentFileIconInfo.FileInfo.Attributes.HasFlag(FileAttributes.Directory))
             //Process.Start(dataContext.CurrentFileIconInfo.FileInfo.FullName);
-
             if (dataContext.CurrentFileIconInfo.FileInfo.Attributes.HasFlag(FileAttributes.Directory))
             {
                 UpdateViewModelDataContext(dataContext.CurrentFileIconInfo.FileInfo.FullName);
@@ -145,24 +145,7 @@ namespace UserControls
                 UpdateViewModelDataContext(parent);
         }
 
-        private void icFiles_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (Keyboard.Modifiers != ModifierKeys.Control)
-                return;
-
-            if (e.Delta > 0)
-                ZoomIn();
-
-            else if (e.Delta < 0)
-                ZoomOut();
-        }
-
-        private void ZoomIn()
-        {
-            
-        }
-
-        private void ZoomOut()
+        private void ucFileControl_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
 
         }

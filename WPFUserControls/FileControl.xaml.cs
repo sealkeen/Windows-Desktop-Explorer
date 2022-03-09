@@ -27,28 +27,19 @@ namespace UserControls
             ItemIndex = MaxIndex++;
         }
 
-        public int ItemIndex { get; set; }
-
         public static int MaxIndex;
 
+        public int ItemIndex { get; set; }
         public static readonly DependencyProperty ItemIndexProperty =
-            DependencyProperty.Register("ItemIndex", typeof(int),
-            typeof(FileControl), new UIPropertyMetadata(0));   
+            DependencyProperty.Register("ItemIndex", typeof(int), typeof(FileControl), new UIPropertyMetadata(0));   
 
         public FileIconInfo FileIconInfo { get; set; }
-
         public static readonly DependencyProperty FileIconInfoProperty =
-            DependencyProperty.Register("FileIconInfo", typeof(FileIconInfo),
-            typeof(FileControl), new UIPropertyMetadata(null));
+            DependencyProperty.Register("FileIconInfo", typeof(FileIconInfo), typeof(FileControl), new UIPropertyMetadata(null));
 
-        public IEnumerable ItemsSource
-        {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
-            set { SetValue(ItemsSourceProperty, value); }
-        }
+        public IEnumerable ItemsSource { get { return (IEnumerable)GetValue(ItemsSourceProperty); } set { SetValue(ItemsSourceProperty, value); } }
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register("ItemsSource", typeof(DirectoryFiles), typeof(FileControl), new PropertyMetadata(null));
-
 
         private void btnTakeOwnership_Click(object sender, RoutedEventArgs e)
         {
@@ -58,6 +49,14 @@ namespace UserControls
         private void btnIconButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             AccessController.TakeOwnership(FileIconInfo.FileInfo.FullName);
+        }
+
+        private void fileControl_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            btnIconButton.Height = ExplorerLibrary.FileIconInfo._iconHeight;
+            btnIconButton.Width = ExplorerLibrary.FileIconInfo._iconWidth;
+            //btnIconButton.GetBindingExpression(Button.HeightProperty).UpdateTarget();
+            //btnIconButton.GetBindingExpression(Button.WidthProperty).UpdateTarget();
         }
     }
 }

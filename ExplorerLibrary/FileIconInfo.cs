@@ -9,21 +9,37 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Interop;
+using System.ComponentModel;
 
 namespace ExplorerLibrary
 {
-    public class FileIconInfo
+    public class FileIconInfo : INotifyPropertyChanged
     {
         FileIconInfo()
         {
             ItemIndex = MaxItemIndex++;
+            IconHeight = _iconHeight;
+            IconWidth = _iconWidth;
         }
 
+        public static UInt32 _iconHeight;
+        public static UInt32 _iconWidth;
+        public UInt32 IconHeight {get;set;} //{ get { return _iconHeight; } set { _iconHeight = value; OnPropertyChanged("IconHeight"); } }
+        public UInt32 IconWidth {get;set;} //{ get { return _iconWidth; } set { _iconWidth = value; OnPropertyChanged("IconWidth"); } }
         public Icon Icon {get;set;}
         public FileSystemInfo FileInfo { get; set; }
         public ImageSource IconSource {get;set;}
         public int ItemIndex { get; set; }
         public static int MaxItemIndex = 0;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 
         public void OpenFile()
         {

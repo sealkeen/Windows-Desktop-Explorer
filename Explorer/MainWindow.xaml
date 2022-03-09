@@ -6,6 +6,7 @@
         xmlns:uc="clr-namespace:UserControls;assembly=WPFUserControls"
         Background="Transparent"
         AllowsTransparency="True"
+        PreviewMouseWheel="icFiles_PreviewMouseWheel"
         >
     <!--<Window.Background>
         <Background="Transparent"/>
@@ -126,12 +127,12 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>-->
-        <uc:FileStackPanel x:Name="ucFiles" 
+        <uc:FileStackPanel x:Name="ucFiles"
             Grid.Row = "1" Grid.Column="0"
             DataContext = "{Binding DirectoryFiles}"
             ItemsSource = "{Binding FileIconInfos}"
             MouseDoubleClick = "icFiles_MouseDoubleClick"
-            Initialized = "fileStackPanel_Loaded" >
+            Initialized = "fileStackPanel_Loaded">
         </uc:FileStackPanel>
     </Grid>
 </Window>

@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
-namespace WPFUserControls
+namespace UserControls
 {
     public class ViewModelBase
     {
@@ -27,7 +27,7 @@ namespace WPFUserControls
         {
             get
             {
-                return _clickCommand ?? (_clickCommand = new CommandHandler(() => MyAction(), () => CanExecute));
+                return _clickCommand; //?? (_clickCommand = new CommandHandler(() => MyAction(), () => CanExecute));
             }
         }
         public bool CanExecute

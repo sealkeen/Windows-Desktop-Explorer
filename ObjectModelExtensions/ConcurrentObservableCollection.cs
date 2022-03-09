@@ -12,7 +12,6 @@ namespace ObjectModelExtensions
     public class ConcurrentObservableCollection<T> : ObservableCollection<T>
     {
         private SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
-
         private bool _suppressNotification = false;
 
         public ConcurrentObservableCollection()

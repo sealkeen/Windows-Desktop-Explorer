@@ -121,6 +121,10 @@
       <Project>{294C0FCF-60F5-4FF4-A1AE-3FEE630E6B7B}</Project>
       <Name>ExplorerLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ObjectModelExtensions\ObjectModelExtensions.csproj">
+      <Project>{4E924CA5-C080-48F7-9B8C-F00A0E959341}</Project>
+      <Name>ObjectModelExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Win32Interop\Win32Interop.csproj">
       <Project>{CFC78B33-F276-4625-8631-62C0365EFFCF}</Project>
       <Name>Win32Interop</Name>
